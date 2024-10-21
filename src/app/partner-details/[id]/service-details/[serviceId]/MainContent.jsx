@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 import { serviceData } from "./ServiceData";
 import axios from "axios";
 import Image from "next/image";
-import { ShimmerThumbnail } from "react-shimmer-effects";
+import { ShimmerSimpleGallery, ShimmerThumbnail } from "react-shimmer-effects";
 
 const MainContent = () => {
   const [openIndex, setOpenIndex] = useState(null);
@@ -14,22 +14,23 @@ const MainContent = () => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true); // Loading state
   const { id, serviceId } = useParams();
+  const [isDesktop, setIsDesktop] = useState(false);  // Will detect desktop view
 
   // Detect screen width and set openIndex on desktop
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     if (window.innerWidth >= 768) { // Tailwind's md breakpoint
-  //       setIsDesktop(true);
-  //       setOpenIndex(0); // Open the first dropdown by default in desktop
-  //     } else {
-  //       setIsDesktop(false);
-  //       setOpenIndex(null); // Reset for mobile
-  //     }
-  //   };
-  //   handleResize(); // Set initial state on mount
-  //   window.addEventListener('resize', handleResize); // Add resize listener
-  //   return () => window.removeEventListener('resize', handleResize); // Clean up listener
-  // }, []);
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) { // Tailwind's md breakpoint
+        setIsDesktop(true);
+        setOpenIndex(0); // Open the first dropdown by default in desktop
+      } else {
+        setIsDesktop(false);
+        // setOpenIndex(null); // Reset for mobile
+      }
+    };
+    handleResize(); // Set initial state on mount
+    window.addEventListener('resize', handleResize); // Add resize listener
+    return () => window.removeEventListener('resize', handleResize); // Clean up listener
+  }, []);
 
   const toggleDropdown = (index) => {
     setOpenIndex(openIndex === index ? null : index);  // Toggle the dropdown
